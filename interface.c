@@ -7,13 +7,6 @@
 
 
 
-
-typedef struct point
-{
-	int x;
-	int y;
-} point;
-
 void seed_random_number()
 {
 	// Seed the random number generator with the current time
@@ -77,11 +70,11 @@ WINDOW *border_creator(int x, int y, int score)
 	return win;
 }
 
-int check_collision(point head, point body[], int length)
+int check_collision(point head[128], int length, int x, int y)
 {
-    for (int i = 0; i < length; i++)
+    for (int i = 1; i < length; i++)
     {
-        if (head.x == body[i].x && head.y == body[i].y)
+        if (x == head[i].x && y == head[i].y)
         {
             return 1; // Collision detected
         }
@@ -89,9 +82,31 @@ int check_collision(point head, point body[], int length)
     return 0; // No collision
 }
 
+void shift_snake(point head[128],int length,int x, int y)
+{
+    for (int j = length; j> 0; j--)
+        head[j] = head[j -1 ];
+    
+    head[0].x = x;
+    head[0].y = y;
+}
+
+void draw_snake(WINDOW **win, point SNAKE[128], int snake_length, int x, int y, int rand_x,int rand_y)
+{
+    delwin(*win);
+    *win = border_creator(x, y, snake_length);
+    for (int j = 0; j < snake_length; j++)
+        mvwaddch(*win, SNAKE[j].y, SNAKE[j].x, 'o');
+
+    mvwaddch(*win, rand_y, rand_x, 'i');
+
+    wrefresh(*win);
+}
+
 void moving_snake(WINDOW *win, int x, int y, int *score)
 {
     char click_mover;
+    direction_type current_dirr = RIGHT;
 
     int snake_length = 1;
     int rand_x = generate_random_number(x - 2);
@@ -124,14 +139,11 @@ void moving_snake(WINDOW *win, int x, int y, int *score)
         case 'q':
             delwin(win);
             return;
+        default:
+            break;
         }
 
-        for (int j = snake_length; j > 0; j--)
-        {
-            SNAKE[j] = SNAKE[j - 1];
-        }
-        SNAKE[0].x = mov_x;
-        SNAKE[0].y = mov_y;
+        shift_snake(SNAKE, snake_length,mov_x,mov_y);
 
 		// eat to grow big
         if (mov_y == rand_y && mov_x == rand_x)
@@ -142,26 +154,30 @@ void moving_snake(WINDOW *win, int x, int y, int *score)
             snake_length++;
         }
 
-		// collision with the body
-		for (int j = 1; j < snake_length; j++)
-            if (mov_x == SNAKE[j].x && mov_y == SNAKE[j].y)
-                return;
-		
+
+		int ok = check_collision(SNAKE,snake_length,mov_x,mov_y);
+        if (ok)
+            return;
+
 		// border collision
         if (mov_y == 0 || mov_y == y - 1 || mov_x == 0 || mov_x == x - 1)
             return;
 
 		// redraw snake and map
-        delwin(win);
-        win = border_creator(x, y, *score);
+        draw_snake(&win,SNAKE,snake_length,x,y,rand_x,rand_y);
 
-        for (int j = 0; j < snake_length; j++)
-        {
-            mvwaddch(win, SNAKE[j].y, SNAKE[j].x, 'o');
-        }
 
-        mvwaddch(win, rand_y, rand_x, 'i');
+        // delwin(win);
+        // win = border_creator(x, y, *score);
 
-        wrefresh(win);
+        // for (int j = 0; j < snake_length; j++)
+        // {
+        //     mvwaddch(win, SNAKE[j].y, SNAKE[j].x, 'o');
+        // }
+
+        // mvwaddch(win, rand_y, rand_x, 'i');
+
+        // wrefresh(win);
+        
     }
 }
