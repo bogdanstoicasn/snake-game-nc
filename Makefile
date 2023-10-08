@@ -1,28 +1,28 @@
-# Copyright 2022-2023 Stoica Bogdan (bogdanstoicasn@yahoo.com)
 # Compiler
 CC = gcc
 OUT = test
 
-# Flags for warnings
-CFLAGS = -Wall -Wextra -std=c99
+# Directories
+SRC_DIR = src
+LIB_DIR = lib
+
+# Flags for warnings and include directories
+CFLAGS = -Wall -Wextra -std=c99 -I$(LIB_DIR)
 LDFLAGS = -lncurses
 
+# Source files
+SRC = $(SRC_DIR)/snake.c $(SRC_DIR)/main.c $(SRC_DIR)/interface.c
+
 # Object files created at build
-OBJ = snake.o main.o interface.o
+OBJ = $(SRC:.c=.o)
 
 # Build program
 build: $(OBJ)
 	$(CC) $(OBJ) -o $(OUT) $(LDFLAGS)
 
-# snake compilation
-snake: snake.c
-	$(CC) $(CFLAGS) -c snake.c $(LDFLAGS)
-
-interface: interface.c
-	$(CC) $(CFLAGS) -c interface.c $(LDFLAGS)
-# Main compilation
-main: main.c
-	$(CC) $(CFLAGS) -c main.c
+# Compile each source file separately
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
 # Run
 run: build
@@ -30,10 +30,11 @@ run: build
 
 # Clean
 clean:
-	rm -f *.o $(OUT)
+	rm -f $(OBJ) $(OUT)
 
 # Pack
 pack:
-	zip -FSr file.zip README Makefile *.c *.h
+	zip -FSr file.zip README Makefile $(SRC) $(LIB_DIR)/*.h
 
 .PHONY: pack clean
+
