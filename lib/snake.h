@@ -33,6 +33,6 @@ void shift_snake(point head[T_SIZE_T],int length,int x, int y);
 void draw_snake(WINDOW **win, point SNAKE[T_SIZE_T], int snake_length, int x, int y, int rand_x,int rand_y);
 
 int check_collision(point head[T_SIZE_T], int length, int x, int y);
-void game_wrapper();
+void game_wrapper(int *table);
 
 #endif

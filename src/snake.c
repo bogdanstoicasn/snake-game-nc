@@ -194,7 +194,7 @@ void moving_snake(WINDOW *win, int x, int y, int *score)
     }
 }
 
-void game_wrapper()
+void game_wrapper(int *table)
 {
     seed_random_number();
     int x = 0, y = 0, score = 1;
@@ -206,4 +206,6 @@ void game_wrapper()
     moving_snake(win, x, y, &score);
     
     end_ncurses(win);
+    clear();
+    *table = score;
 }
