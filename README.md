@@ -17,10 +17,12 @@ due to its dependency on the ncurses library and unistd.h.
 
 > **GCC Compiler**: You need the GCC compiler to build the game. You can install
 it on Debian/Ubuntu with the following command:
+
 	sudo apt-get install build-essential
 	
 > **Ncurses Library**: You need the ncurses library for the user interface.
 Install it on Debian/Ubuntu with:
+
 	sudo apt-get install libncurses-dev
 
 ## How to Build
@@ -28,9 +30,11 @@ Install it on Debian/Ubuntu with:
 Clone this repository or download the source code.
 Navigate to the project directory.
 Open a terminal and run the following command to compile the game:
+
 	make
 
 This will create an executable file named **snake_game**. You can run the game with:
+
 	./snake_game
 
 
