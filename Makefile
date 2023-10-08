@@ -8,16 +8,18 @@ CFLAGS = -Wall -Wextra -std=c99
 LDFLAGS = -lncurses
 
 # Object files created at build
-OBJ = interface.o main.o
+OBJ = snake.o main.o interface.o
 
 # Build program
 build: $(OBJ)
 	$(CC) $(OBJ) -o $(OUT) $(LDFLAGS)
 
-# Interface compilation
+# snake compilation
+snake: snake.c
+	$(CC) $(CFLAGS) -c snake.c $(LDFLAGS)
+
 interface: interface.c
 	$(CC) $(CFLAGS) -c interface.c $(LDFLAGS)
-
 # Main compilation
 main: main.c
 	$(CC) $(CFLAGS) -c main.c
