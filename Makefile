@@ -1,6 +1,6 @@
 # Compiler
 CC = gcc
-OUT = test
+OUT = snake_game
 
 # Directories
 SRC_DIR = src
